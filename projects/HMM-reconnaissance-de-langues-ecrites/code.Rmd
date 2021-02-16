@@ -3,8 +3,7 @@ title: "Reconnaissance de langues écrites HMM"
 author: "Mamadou KANOUTE"
 date: "18/12/2020"
 output:
-  md_document:
-    variant: markdown_github
+  md_document: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -302,7 +301,7 @@ print(EM_all_data$logLikehood)
 
 ```
 
-## 3. Performance du classifieur
+## Performance du classifieur
 
 Cette partie est en deux étapes, j'évalue la performance du classifieur:                                           
 
@@ -443,7 +442,7 @@ On voit la performance du classifieur sur nos données.
 
 # Exercice 3: Approche par chaîne de markov caché
 
-## 1. Estimation des paramètres
+## Estimation des paramètres
 
 Dans cette partie je crée un classifieur markovien basé sur les matrices de transitions entre nos différents symboles des différentes.
 
@@ -549,7 +548,7 @@ B = matrix(c(B1, B2), 27,2)
 
 ```
 
-## 2. Programmation du classifieur
+## Programmation du classifieur
 
 Je simule d'abord les deux chaînes de markov à partir des paramètres calculés précédemment.
 
@@ -620,7 +619,7 @@ print(matDeConfusion_markov_cv)
 
 # Exercice 3: Viterbi
 
-# 1. Création d'un court texte
+## Création d'un court texte
 Le court texte est dans le fichier viterbi.csv
 Chaque est une observation dont va essayer de déterminer la langue
 
@@ -642,7 +641,7 @@ print(court_texte)
 ```
 
 
-## 2. Application du viterbi
+## Application du viterbi
 
 ### Les paramètres à passer  à l'algorithme de viterbi.
 La matrice de transition **A_viterbi** est faite en se basant sur l'alternance des langues des différentes phrases.                                            
@@ -819,7 +818,7 @@ for (i in 1:length(indicesEnglish)) {
 
 # Exercice4: algorithme de Baum-Welch
 
-## 1. Algorithme de Baum-Welch pour deux états cachés
+## Algorithme de Baum-Welch pour deux états cachés
 
 Dans cette partie, je code les fonctions `forward`, `backward` ainsi que les méthodes d'estimation de la `matrice de transition`` et des probabilités d'émission` pour deux états cachés.                                                                                       
 Le plus gros problème lors de la modélisation d'un HMM étant de l'imprécision des flottants, J'utiliserai dans les fonctions `forward`, `backward` des méthodes pour éviter de tendre vers l'infini ou être à zéro.
@@ -978,9 +977,6 @@ baumWelchEstim = function(hmm, observation)
 }
 
 
-# BWR = baumWelchEstim(hmm, observation)
-
-
 ```
 
 ### je regroupe tout ici
@@ -1020,11 +1016,9 @@ baumWelch = function(hmm, observation, maxIterations=100, delta=1E-9, pseudoCoun
 }
 
 
-
-
 ```
 
-## 2. Excécution de l'algorithme de Baum-Welch avec comme initialisation les informations de l'exercice précédent
+## Excécution de l'algorithme de Baum-Welch avec comme initialisation les informations de l'exercice précédent
 Dans cette partie, j'excécute **l'algorithme de Baum-Welch** en utilisant comme initialisation les informations de l'exercice précédent.                                              
 ```{r exececute_baum_welch}
 
@@ -1043,7 +1037,7 @@ print(BW$hmm$emissionProbs)
 
 ```
 
-## 3. Test des paramètres obtenus par l'algorithme de Baum-welch avec Viterbi, initialisation avec les informations des exercices précédents
+## Test des paramètres obtenus par l'algorithme de Baum-welch avec Viterbi, initialisation avec les informations des exercices précédents
 
 Dans cette partie, je teste les paramètres obtenus par **l'algorithme de Baum-Welch**, je fais  appel à **l'algorithme de Viterbi** avec comme A et B les paramètres données par **l'algorithme de Baum-Welch**.
 
@@ -1094,7 +1088,7 @@ for (i in 1:length(indicesEnglish_)) {
 **Je remarque qu'avec une idée de l'initialisation des probabilités du HMM que nous recherchons  même approximative, l'algorithme de baum-welch converge et je se rapproche des vraies valeurs de A et de B**
 
 
-## 4. Baum-Welch avec initialisation aléatoire
+## Baum-Welch avec initialisation aléatoire
 
 Dans cette partie, je teste les paramètres estimés par **l'algorithme de Baum-Welch** sur des paramètres initialisés aléatoirement.                                               
 Ce test est fait passant ces paramètres à **l'algorithme de Viterbi**.
@@ -1192,7 +1186,7 @@ cat("\n")
 
 Avec une initialisation aléatoire, j'ai pas les bons paramètres correspondant à notre séquences
 
-## 5. Commentaires
+## Commentaires
 
 **Je vois bien que l'algorithme de baum-welch présente cependant le défaut de ne pas toujours converger vers la même solution, voire même de ne pas converger du tout sous certaines conditions.**                                 
 
@@ -1201,7 +1195,7 @@ Avec une initialisation aléatoire, j'ai pas les bons paramètres correspondant 
 
 # Exercice 6: Modèle à bloc stochastique
 
-## 1. Distance euclidienne d(i, j) entre tous les textes deux à deux
+## Distance euclidienne d(i, j) entre tous les textes deux à deux
 
 ```{r dist_euclid}
 
@@ -1233,7 +1227,7 @@ matriceDist = createMatriceDist(X)
 
 ```
 
-## 2. Création d'une matrice binaire K
+## Création d'une matrice binaire K
 
 ```{r mat_K}
 
@@ -1287,7 +1281,7 @@ plot(graph_from_adjacency_matrix(K,mode="undirected"),vertex.color=tmpY, main="T
 
 ```
 
-## 3. Modèles à blocs stochastiques
+## Modèles à blocs stochastiques
 
 ```{r MBS}
 

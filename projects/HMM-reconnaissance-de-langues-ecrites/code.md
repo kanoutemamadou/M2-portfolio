@@ -1,3 +1,8 @@
+Reconnaissance de langues écrites HMM
+================
+Mamadou KANOUTE
+18/12/2020
+
 ``` r
 library(tidyverse)
 ```
@@ -58,19 +63,18 @@ library(igraph)
     ## 
     ##     union
 
-Exercice 1: Traitement de textes
-================================
+# Exercice 1: Traitement de textes
 
-Import du fichier csv contenant les textes
-------------------------------------------
+## Import du fichier csv contenant les textes
 
 J’importe les textes à partir d’un fichier csv.  
 Le fichier .csv comporte **90 textes (anglais et français)**  
 Pour chaque ligne, le séparateur entre le texte et le y (langue du
-texte) est \| comme suit:
+texte) est | comme suit:
 
-texte\|-1 : texte en français  
-texte\|1 : texte en anglais
+texte|-1 : texte en français  
+texte|1 : texte en
+anglais
 
 ``` r
 file = "/home/boua/Documents/Tps/2020_2021/Non_supervisé/Projet/textsbruts.csv"
@@ -95,15 +99,16 @@ print(y)
     ## [51]  1 -1 -1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1  1 -1  1  1 -1  1 -1
     ## [76]  1 -1  1 -1 -1 -1 -1 -1  1  1  1 -1 -1 -1 -1
 
-Fonctions pour le nettoyage de texte
-------------------------------------
+## Fonctions pour le nettoyage de texte
 
 Dans cette partie, j’effectue les actions suivantes sur les textes:
 
--   supprimer caractères spéciaux: \[(),-,.:;-?\_!’’«»"\]  
--   convertir tous les textes en miniscules  
--   transformer les caractères avec accent, chapeau en caractères
-    normaux comme suit â -&gt; a, é -&gt; e, è -&gt; e, û -&gt; u, …..
+  - supprimer caractères spéciaux: \[(),-,.:;-?\_\!’’«»"\]  
+  - convertir tous les textes en miniscules  
+  - transformer les caractères avec accent, chapeau en caractères
+    normaux comme suit â -\> a, é -\> e, è -\> e, û -\> u, …..
+
+<!-- end list -->
 
 ``` r
 nettoyageTexte = function(text, regExp, remplacement=TRUE) {
@@ -117,16 +122,14 @@ nettoyageTexte = function(text, regExp, remplacement=TRUE) {
 }
 ```
 
-Application au texte
---------------------
+## Application au texte
 
 ``` r
 regExp = "[(),-,.:;-?_!'’«»\"]"
 lines = nettoyageTexte(intialTexts, regExp)
 ```
 
-Création de la matrice de fréquence f
--------------------------------------
+## Création de la matrice de fréquence f
 
 Je crée une `matrice f` qui contient la fréquence des symboles dans un
 texte.  
@@ -164,8 +167,7 @@ print(paste("La dimension de la matrice f est:",toString(dim(f))))
 
     ## [1] "La dimension de la matrice f est: 90, 27"
 
-2. Matrice `X` créée à partir de la matrice f
----------------------------------------------
+## 2\. Matrice `X` créée à partir de la matrice f
 
 J’utilise la fonction `log` sur les fréquences telles que Xij =
 log(1+fij) pour harmonizer les données
@@ -184,8 +186,7 @@ X = createX(f, lines)
 # print(X[1:10,1:27])
 ```
 
-3. Histogramme pour chacune des 2 langues
------------------------------------------
+## 3\. Histogramme pour chacune des 2 langues
 
 Dans cette partie, j’affiche les log fréquences des textes en français
 en anglais et en français
@@ -216,32 +217,30 @@ logFreqFrench = showHist(X, y, -1)
 barplot(logFreqFrench$tabNormalizedWithLabels, main="Fréquences en français")
 ```
 
-![](code_files/figure-markdown_github/show_hist_by_langue-1.png)
+![](code_files/figure-gfm/show_hist_by_langue-1.png)<!-- -->
 
 ``` r
 logFreqEnglish = showHist(X, y, 1)
 barplot(logFreqEnglish$tabNormalizedWithLabels, main="Fréquences en anglais")
 ```
 
-![](code_files/figure-markdown_github/show_hist_by_langue-2.png)
+![](code_files/figure-gfm/show_hist_by_langue-2.png)<!-- -->
 
 ### Commentaires
 
 Je peux remarquer pour les textes en français, j’ai plus grande
 fréquence des lettres “e”, “j” et “q” qu’en anglais. Parallèlement,
-j’observe une plus grande fréquence des lettres “k”, “y” et “w” qui sont
-très présence dans la langue anglaise. Ces fréquences sont très logique
-compte tenu de ces deux langues et de la structure de leurs mots
+j’observe une plus grande fréquence des lettres “k”, “y” et “w” qui
+sont très présence dans la langue anglaise. Ces fréquences sont très
+logique compte tenu de ces deux langues et de la structure de leurs mots
 respectifs.
 
-Exercice 2: A pproche gaussian mixture( algorithme EM )
-=======================================================
+# Exercice 2: A pproche gaussian mixture( algorithme EM )
 
 Je vais utiliser **l’algorithme EM** pour déterminer les paramètres de
 la mixture gaussienne
 
-Initialisation
---------------
+## Initialisation
 
 ``` r
 K = 2
@@ -293,8 +292,7 @@ print(initParameters$mus)
 # print(diag(rep(initParameters$sigmas[1], p)))
 ```
 
-Fonction etape E
-----------------
+## Fonction etape E
 
 Ici je calcule la vraisemblance
 
@@ -316,8 +314,7 @@ etapeE = function(mat, K, parameters) {
 E = etapeE(X, K, initParameters)$E
 ```
 
-Fonction etape M
-----------------
+## Fonction etape M
 
 Dans cette partie, je cherche les paramètres qui maximisent la
 vraisemblance
@@ -344,8 +341,7 @@ etapeM = function(mat, E, K) {
 }
 ```
 
-Fonction EM combinant les étapes d’initialisation, E et M
----------------------------------------------------------
+## Fonction EM combinant les étapes d’initialisation, E et M
 
 J’effectue les trois étapes jusqu’à convergence. Notre test se fait sur
 le logLikehood, je regarde la différence du logLike du précédent calcul
@@ -442,15 +438,14 @@ print(EM_all_data$logLikehood)
     ##  [1]    0.000    1.000 7680.831 7680.831 7680.836 7735.876 8118.387 8304.240
     ##  [9] 8354.864 8356.015 8356.015 8356.015
 
-3. Performance du classifieur
------------------------------
+## Performance du classifieur
 
 Cette partie est en deux étapes, j’évalue la performance du classifieur:
 
 1.  sur toutes les données  
 2.  par validation
 
-### 1. Sur toutes les données
+### 1\. Sur toutes les données
 
 ``` r
 ConfusionMatrix = function(y, y_pred) {
@@ -499,16 +494,16 @@ print(matDeConfusion_all_data)
     ##   -1 45  0
     ##   1   0 45
 
-### 2. Validation croisée
+### 2\. Validation croisée
 
 Grâce à la fonction `createDataPartition` de `caret`, j’effectue une
 validation croisée sur nos données. On procède comme suit:
 
--   Je fais les données d’entraînement et de test de façon aléatoire
+  - Je fais les données d’entraînement et de test de façon aléatoire
     avec `createDataPartition` de la librairie `caret`  
--   J’évalue les paramètres sur les 30 derniers textes et je evalue ses
+  - J’évalue les paramètres sur les 30 derniers textes et je evalue ses
     performances sur les 30 premiers textes
--   Je réalise un kfold sur 3 groupes de textes avec les paramètres de
+  - Je réalise un kfold sur 3 groupes de textes avec les paramètres de
     60 textes comme données d’entraînement et 30 textes comme test
 
 #### Validation croisée avec createDataPartition
@@ -583,7 +578,8 @@ etj’aimerait évaluer ses performances sur les 30 restants
     ##   1   0 30
 
 **Les données sont bien melangées au début, ce qui fait qu’on a des
-données d’entraînement qui sont représentatives des données de test.**
+données d’entraînement qui sont représentatives des données de
+test.**
 
 #### Validation croisée sur chaque groupe de 30 textes entrainés sur les 60 autres
 
@@ -644,11 +640,9 @@ print(mean(Acc))
 
 On voit la performance du classifieur sur nos données.
 
-Exercice 3: Approche par chaîne de markov caché
-===============================================
+# Exercice 3: Approche par chaîne de markov caché
 
-1. Estimation des paramètres
-----------------------------
+## Estimation des paramètres
 
 Dans cette partie je crée un classifieur markovien basé sur les matrices
 de transitions entre nos différents symboles des différentes.
@@ -749,8 +743,7 @@ B2 = parameters2$Pi
 B = matrix(c(B1, B2), 27,2)
 ```
 
-2. Programmation du classifieur
--------------------------------
+## Programmation du classifieur
 
 Je simule d’abord les deux chaînes de markov à partir des paramètres
 calculés précédemment.
@@ -844,14 +837,13 @@ print(matDeConfusion_markov_cv)
     ##   -1 21 24
     ##   1  21 24
 
-Exercice 3: Viterbi
-===================
+# Exercice 3: Viterbi
 
-1. Création d’un court texte
-============================
+## Création d’un court texte
 
 Le court texte est dans le fichier viterbi.csv Chaque est une
-observation dont va essayer de déterminer la langue
+observation dont va essayer de déterminer la
+langue
 
 ``` r
 phrase1 = "C'est ainsi qu'il restructure la destructuration circonstancielle du nativisme"
@@ -883,8 +875,7 @@ print(court_texte)
 
     ## [1] "C'est ainsi qu'il restructure la destructuration circonstancielle du nativisme this is the price and the promise of citizenship  of America's the coldest country cependant mitiger ce raisonnement car il envisage l'expression générative du nativisme the year of America's birth, in the coldest of month Mais il ne faut pas oublier pour autant qu'il envisage la destructuration empirique du nativisme Homes have been lost; jobs shed; businesses shuttered"
 
-2. Application du viterbi
--------------------------
+## Application du viterbi
 
 ### Les paramètres à passer à l’algorithme de viterbi.
 
@@ -1190,23 +1181,21 @@ for (i in 1:length(indicesEnglish)) {
 ### Commentaires
 
 **Je remarque que dans cette méthode, à chaque étape la probabilité
-d’émission du caractère et du caractère précédent joue un rôle important
-dans la détection des passages et des couples de caractères(bigrammes)**
+d’émission du caractère et du caractère précédent joue un rôle
+important dans la détection des passages et des couples de
+caractères(bigrammes)**
 
-Exercice4: algorithme de Baum-Welch
-===================================
+# Exercice4: algorithme de Baum-Welch
 
-1. Algorithme de Baum-Welch pour deux états cachés
---------------------------------------------------
+## Algorithme de Baum-Welch pour deux états cachés
 
 Dans cette partie, je code les fonctions `forward`, `backward` ainsi que
-les méthodes d’estimation de la
-``` matrice de transition`` et des probabilités d'émission ``` pour deux
-états cachés.  
+les méthodes d’estimation de la `matrice de transition`` et des
+probabilités d'émission` pour deux états cachés.  
 Le plus gros problème lors de la modélisation d’un HMM étant de
-l’imprécision des flottants, J’utiliserai dans les fonctions `forward`,
-`backward` des méthodes pour éviter de tendre vers l’infini ou être à
-zéro.
+l’imprécision des flottants, J’utiliserai dans les fonctions
+`forward`, `backward` des méthodes pour éviter de tendre vers l’infini
+ou être à zéro.
 
 ### Forward
 
@@ -1289,8 +1278,8 @@ backward = function(hmm, observation)
 
 ### Etape Calcul de la matrice A et de la probabilité d’émission
 
-Ici j’estime ou réestime la `matrice de transion` et les
-`probabilités d'émission`
+Ici j’estime ou réestime la `matrice de transion` et les `probabilités
+d'émission`
 
 ``` r
 baumWelchEstim = function(hmm, observation)
@@ -1357,9 +1346,6 @@ baumWelchEstim = function(hmm, observation)
   }
   return(list(TransitionMatrix=TransitionMatrix,EmissionMatrix=EmissionMatrix))
 }
-
-
-# BWR = baumWelchEstim(hmm, observation)
 ```
 
 ### je regroupe tout ici
@@ -1398,8 +1384,7 @@ baumWelch = function(hmm, observation, maxIterations=100, delta=1E-9, pseudoCoun
 }
 ```
 
-2. Excécution de l’algorithme de Baum-Welch avec comme initialisation les informations de l’exercice précédent
---------------------------------------------------------------------------------------------------------------
+## Excécution de l’algorithme de Baum-Welch avec comme initialisation les informations de l’exercice précédent
 
 Dans cette partie, j’excécute **l’algorithme de Baum-Welch** en
 utilisant comme initialisation les informations de l’exercice précédent.
@@ -1464,8 +1449,7 @@ print(BW$hmm$emissionProbs)
     ## [26,] 0.002119459 0.0024234978
     ## [27,] 0.137039841 0.1683565010
 
-3. Test des paramètres obtenus par l’algorithme de Baum-welch avec Viterbi, initialisation avec les informations des exercices précédents
------------------------------------------------------------------------------------------------------------------------------------------
+## Test des paramètres obtenus par l’algorithme de Baum-welch avec Viterbi, initialisation avec les informations des exercices précédents
 
 Dans cette partie, je teste les paramètres obtenus par **l’algorithme de
 Baum-Welch**, je fais appel à **l’algorithme de Viterbi** avec comme A
@@ -1535,8 +1519,7 @@ for (i in 1:length(indicesEnglish_)) {
 HMM que nous recherchons même approximative, l’algorithme de baum-welch
 converge et je se rapproche des vraies valeurs de A et de B**
 
-4. Baum-Welch avec initialisation aléatoire
--------------------------------------------
+## Baum-Welch avec initialisation aléatoire
 
 Dans cette partie, je teste les paramètres estimés par **l’algorithme de
 Baum-Welch** sur des paramètres initialisés aléatoirement.  
@@ -1766,12 +1749,11 @@ cat("\n")
 Avec une initialisation aléatoire, j’ai pas les bons paramètres
 correspondant à notre séquences
 
-5. Commentaires
----------------
+## Commentaires
 
 **Je vois bien que l’algorithme de baum-welch présente cependant le
-défaut de ne pas toujours converger vers la même solution, voire même de
-ne pas converger du tout sous certaines conditions.**
+défaut de ne pas toujours converger vers la même solution, voire même
+de ne pas converger du tout sous certaines conditions.**
 
 **Et ces problèmes surviennent surtout losque nous n’avons aucune idée
 des probabilités du HMM que nous recherchons (pas même approximative) et
@@ -1779,11 +1761,9 @@ que nous commençons donc avec un HMM avec des paramètres aléatoires (ce
 qui signifie que les probabilités de départ et de transition sont
 aléatoires).**
 
-Exercice 6: Modèle à bloc stochastique
-======================================
+# Exercice 6: Modèle à bloc stochastique
 
-1. Distance euclidienne d(i, j) entre tous les textes deux à deux
------------------------------------------------------------------
+## Distance euclidienne d(i, j) entre tous les textes deux à deux
 
 ``` r
 # Fonction distance euclidienne
@@ -1813,8 +1793,7 @@ matriceDist = createMatriceDist(X)
 # print(matriceDist)
 ```
 
-2. Création d’une matrice binaire K
------------------------------------
+## Création d’une matrice binaire K
 
 ``` r
 # La médiane des distances calculées
@@ -1897,10 +1876,9 @@ print("Les textes en anglais sont colorés et les textes en français sont sans 
 plot(graph_from_adjacency_matrix(K,mode="undirected"),vertex.color=tmpY, main="Textes en anglais colorés en orange et ceux en français sont sans couleur")
 ```
 
-![](code_files/figure-markdown_github/adjacence_mat-1.png)
+![](code_files/figure-gfm/adjacence_mat-1.png)<!-- -->
 
-3. Modèles à blocs stochastiques
---------------------------------
+## Modèles à blocs stochastiques
 
 ``` r
 class.ind<-function (cl)
@@ -2160,22 +2138,21 @@ print(predict_class_mbs)
 **J’ai parfois une interversion des paramètres, probablement dû à
 l’initialisation des paramètres du VEM.**
 
-CONCLUSION
-==========
+# CONCLUSION
 
 Différences parmi les classifieurs étudiés :
 
--   Le classifieur de bayes basés sur des unigrammes  
--   Le classifieur markovien (pas les mêmes resultats à chaque fois dû
+  - Le classifieur de bayes basés sur des unigrammes  
+  - Le classifieur markovien (pas les mêmes resultats à chaque fois dû
     au caractères aléatoires des simulations des chaînes de Markov)  
--   Viterbi donne une bonne performance sur les séquences observées avec
+  - Viterbi donne une bonne performance sur les séquences observées avec
     les bons paramètres (ici nos probabilités d’emission des caractères
     et de la matrice de transition)  
--   Baum-Welch marche mieux quand j’initialise avec les bons paramètres
+  - Baum-Welch marche mieux quand j’initialise avec les bons paramètres
     (ici nos 2 matrices de transition CF exercice3), tandis que si je
     l’initialise aleatoirement, j’ai parfois peu ou pas de convergence
     vers une solution correspondante à nos observations  
--   VEM basé sur la matrice de similarité, si des mots ont des
+  - VEM basé sur la matrice de similarité, si des mots ont des
     frequences qui se rapprochent mais sont de deux langues differentes,
     je peux avoir le risque d’avoir une mauvaise classification
 
