@@ -22,10 +22,10 @@ library(igraph)
 
 ```
 
-# Exercice 1: 
+# Exercice 1: Traitement de textes
 
 ## Import du fichier csv contenant les textes
-On importe les textes à partir d'un fichier csv.                                                                                   
+J'importe les textes à partir d'un fichier csv.                                                                                   
 Le fichier .csv comporte **90 textes (anglais et français)**                                                                       
 Pour chaque  ligne, le séparateur entre le texte et le y (langue du texte) est | comme suit:   
 
@@ -47,7 +47,7 @@ print(y)
 ```
 
 ## Fonctions pour le nettoyage de texte 
-Dans cette partie, On effectue les actions suivantes sur les textes:   
+Dans cette partie, j'effectue les actions suivantes sur les textes:   
 
 - supprimer caractères spéciaux: [(),-,.:;-?_!'’«»\"]                                
 - convertir tous les textes en miniscules                                                                   
@@ -74,7 +74,7 @@ lines = nettoyageTexte(intialTexts, regExp)
 
 
 ## Création de la matrice de fréquence f
-On crée une `matrice f` qui contient la fréquence des symboles dans un texte.                                                                          
+Je crée une `matrice f` qui contient la fréquence des symboles dans un texte.                                                                          
 La `matrice f` est de dimension 90x27, soit **90 lignes(textes) et 27 colonnes(les 26 lettres de l'alphabet et le caractère espace)**
 
 ``` {r matrice_f}
@@ -105,15 +105,12 @@ createMatriceFreq = function(lines, div = TRUE) {
 
 f = createMatriceFreq(lines)$f
 print(paste("La dimension de la matrice f est:",toString(dim(f))))
-cat("\n")
-print("La matrice de fréquence pour les 10 premiers textes est: ")
-print(f[1:10,1:27])
 
 ```
 
 ## 2. Matrice `X` créée à partir de la matrice f
 
-On  utilise la fonction `log` sur les fréquences telles que Xij = log(1+fij) pour harmonizer les données 
+J'utilise la fonction `log` sur les fréquences telles que Xij = log(1+fij) pour harmonizer les données 
 
 ``` {r matrice_X}
 
@@ -126,13 +123,13 @@ createX = function(f, lines) {
 
 X = createX(f, lines)
 
-print("La matrice X pour les 10 premiers textes est: ")
-print(X[1:10,1:27])
+# print("La matrice X pour les 10 premiers textes est: ")
+# print(X[1:10,1:27])
 
 ```
 
 ## 3. Histogramme pour chacune des 2 langues
-Dans cette partie, on affiche les log fréquences des textes en français en anglais et en français
+Dans cette partie, j'affiche les log fréquences des textes en français en anglais et en français
 ```{r show_hist_by_langue}
 
 showHist = function(X, y, type) {
@@ -157,27 +154,23 @@ showHist = function(X, y, type) {
 
 
 logFreqFrench = showHist(X, y, -1)
-print("Les log  fréquences en français: ")
-barplot(logFreqFrench$tabNormalizedWithLabels)
-# barplot(test1$tabNormalizedWithLabels)
-cat("\n")
+barplot(logFreqFrench$tabNormalizedWithLabels, main="Fréquences en français")
 
 logFreqEnglish = showHist(X, y, 1)
-print("Les log fréquences en anglais: ")
-barplot(logFreqEnglish$tabNormalizedWithLabels)
+barplot(logFreqEnglish$tabNormalizedWithLabels, main="Fréquences en anglais")
 
 
 
 ```
 
 ### Commentaires
-  On peut remarquer pour les textes en français, on a plus grande fréquence des lettres "e", "j" et "q" qu'en anglais.
-Parallèlement, on observe une plus grande fréquence des lettres "k", "y" et "w" qui sont très présence dans la langue anglaise.
+  Je peux remarquer pour les textes en français, j'ai plus grande fréquence des lettres "e", "j" et "q" qu'en anglais.
+Parallèlement, j'observe une plus grande fréquence des lettres "k", "y" et "w" qui sont très présence dans la langue anglaise.
 Ces fréquences sont très logique compte tenu de ces deux langues et de la structure de leurs mots respectifs.
 
 
-# Exercice 2: 
-On va utiliser **l'algorithme EM** pour déterminer les paramètres de la mixture gaussienne
+# Exercice 2: A pproche gaussian mixture( algorithme EM )
+Je vais utiliser **l'algorithme EM** pour déterminer les paramètres de la mixture gaussienne
 
 ## Initialisation
 
@@ -214,7 +207,7 @@ print(initParameters$mus)
 ```
 
 ## Fonction etape E
-Ici on calcule la vraisemblance
+Ici je calcule la vraisemblance
 
 ```{r etape_e}
 
@@ -234,11 +227,10 @@ etapeE = function(mat, K, parameters) {
 
 E = etapeE(X, K, initParameters)$E
 
-print(E)
 ```
 
 ## Fonction etape M
-Dans cette partie, on cherche les paramètres qui maximisent la vraisemblance
+Dans cette partie, je cherche les paramètres qui maximisent la vraisemblance
 
 ```{r etape_m}
 
@@ -265,8 +257,8 @@ etapeM = function(mat, E, K) {
 
 ## Fonction EM combinant les étapes d'initialisation, E et M
 
-On effectue les trois étapes jusqu'à convergence.
-Notre test se fait sur le logLikehood, on regarde la différence du logLike du précédent calcul et l'actuel par rapport à tol = 10^-6
+J'effectue les trois étapes jusqu'à convergence.
+Notre test se fait sur le logLikehood, je regarde la différence du logLike du précédent calcul et l'actuel par rapport à tol = 10^-6
 
 ```{r EM}
 
@@ -312,7 +304,7 @@ print(EM_all_data$logLikehood)
 
 ## 3. Performance du classifieur
 
-Cette partie est en deux étapes, on évalue la performance du classifieur:                                           
+Cette partie est en deux étapes, j'évalue la performance du classifieur:                                           
 
 1. sur toutes les données                                                                                                                         
 2. par validation                                                                                                                                   
@@ -325,7 +317,7 @@ ConfusionMatrix = function(y, y_pred) {
   return (mat)
 }
 
-# On transforme les 1 en -1 et les 2 en 1 de nos prédictions
+# je transforme les 1 en -1 et les 2 en 1 de nos prédictions
 
 transformTab = function(tab) {
   for (i in 1:length(tab)) {
@@ -338,7 +330,7 @@ transformTab = function(tab) {
   return (tab)
 }
 
-# On prédit la classe en prenant le max entre les 2 colonnes pour chaque ligne
+# je prédit la classe en prenant le max entre les 2 colonnes pour chaque ligne
 getClass = function(E) {
   tmp = apply(E, 1, which.max)
   res = transformTab(tmp)
@@ -358,12 +350,12 @@ print(matDeConfusion_all_data)
 ```
 
 ### 2. Validation croisée
-Grâce à la fonction `createDataPartition` de `caret`, on effectue une validation croisée sur nos données.
+Grâce à la fonction `createDataPartition` de `caret`, j'effectue une validation croisée sur nos données.
 On procède comme suit:      
 
-* On fait les données d'entraînement et de test de façon aléatoire avec `createDataPartition` de la librairie `caret`                                      
-* On évalue les paramètres sur les 30 derniers textes et on evalue ses performances sur les 30 premiers textes
-* On réalise un kfold sur 3 groupes de textes avec les paramètres de 60 textes comme données d'entraînement et 30 textes comme test 
+* Je fais  les données d'entraînement et de test de façon aléatoire avec `createDataPartition` de la librairie `caret`                                      
+* J'évalue les paramètres sur les 30 derniers textes et je evalue ses performances sur les 30 premiers textes
+* Je réalise un kfold sur 3 groupes de textes avec les paramètres de 60 textes comme données d'entraînement et 30 textes comme test 
 
 #### Validation croisée avec createDataPartition
 Le but est de capturer le maximum de différence entre les différents textes en espérant choisir les données d'entraînement qui reperésentent le mieux les données
@@ -389,7 +381,7 @@ Le but est de capturer le maximum de différence entre les différents textes en
 ```
 
 #### Validation croisée sur les 30 premiers et test sur les 30 autres restants
-Dans cette partie, on a les paramètres sur les 30 premiers textes et on aimerait évaluer ses performances sur les 30 restants
+Dans cette partie, j'ai les paramètres sur les 30 premiers textes etj'aimerait évaluer ses performances sur les 30 restants
 
 ```{r cross_val_2}
 
@@ -415,7 +407,7 @@ Dans cette partie, on a les paramètres sur les 30 premiers textes et on aimerai
 
 #### Validation croisée sur chaque groupe de 30 textes entrainés sur les 60 autres
 
-Ici on réalise un kfold sur nos données.
+Ici Je réalise un kfold sur les données.
 
 ```{r cross_val_3}
 
@@ -439,10 +431,10 @@ for(k in 1:Kf){
   
   print("matrice de confusion")
   print(matDeConfusion)
-  print("y")
-  print(y[k1:k2])
-  print("y_test")
-  print(y_test)
+  # print("y")
+  # print(y[k1:k2])
+  # print("y_test")
+  # print(y_test)
   Acc[k]=(matDeConfusion[1,1]+matDeConfusion[2,2])/sum(matDeConfusion)
 }
 cat("\n")
@@ -454,11 +446,11 @@ print(mean(Acc))
 
 On voit la performance du classifieur sur nos données.
 
-# Exercice 3
+# Exercice 3: Approche par chaîne de markov caché
 
 ## 1. Estimation des paramètres
 
-Dans cette partie on crée un classifieur markovien basé sur les matrices de transitions entre nos différents symboles des différentes.
+Dans cette partie je crée un classifieur markovien basé sur les matrices de transitions entre nos différents symboles des différentes.
 
 ### Fonctions utiles pour estimer les paramètres
 
@@ -492,7 +484,7 @@ normaliseMatrix = function(mat) {
   p = dim(mat)[2]
   newMat = matrix(0, n, p)
   
-  ########### On additionne à notre matrice initiale pour éviter le problème de division par zéros
+  ###########j'additionne à notre matrice initiale pour éviter le problème de division par zéros
   
   mat = mat + 1
   for(i in 1:n) {
@@ -516,14 +508,14 @@ probaInitiale = function(A) {
 # Fonction  Simulation de chaîne de Markov par classe c'est à dire par langue
 ## lines nos textes
 ## y les classes de nos textes
-# La classe pour laquelle on estime les paramètres y = -1 ou  y = 1
+# La classe pour laquelle je estime les paramètres y = -1 ou  y = 1
 
 estimMarkovParameters = function(lines, y, type) {
   
-  # On détermine dans y les indcices où y = type
+  # je détermine dans y les indcices où y = type
   indices = which(y == type)
   
-  # On récupère les textes correspondants aux indices
+  # je récupère les textes correspondants aux indices
   texte = lines[indices]
   
   # opération de traitement pour créer un bigramme
@@ -536,8 +528,8 @@ estimMarkovParameters = function(lines, y, type) {
   
   bigrams<-table(textParLangue2,textParLangue1)
   
-  # On normalise la matrice en ajoutant 1 à chaque élément(pour éviter la division par zéro) de la ligne et 
-  # on divise chaque élément par la somme des éléments
+  # je normalise la matrice en ajoutant 1 à chaque élément(pour éviter la division par zéro) de la ligne et 
+  # je divise chaque élément par la somme des éléments
   A = normaliseMatrix(transitionMatrix(bigrams))
 
   Pi = probaInitiale(A)
@@ -555,23 +547,23 @@ estimMarkovParameters = function(lines, y, type) {
 parameters1 = estimMarkovParameters(lines, y, -1)
 parameters2 = estimMarkovParameters(lines, y, 1)
 
-print("Les paramètres pour le français sont: ")
-print(parameters1)
-
-print("Les paramètres pour l'anglais sont: ")
-print(parameters2)
-
-print("somme des colonnes de pi pour le français")
-print(sum(parameters1$Pi))
-
-print("somme des lignes de A pour le français")
-print(apply(parameters1$A,1,sum))
-
-print("somme des colonnes de pi pour l'anglais")
-print(sum(parameters2$Pi))
-
-print("somme des lignes de A pour l'anglais")
-print(apply(parameters2$A,1,sum))
+# print("Les paramètres pour le français sont: ")
+# print(parameters1)
+# 
+# print("Les paramètres pour l'anglais sont: ")
+# print(parameters2)
+# 
+# print("somme des colonnes de pi pour le français")
+# print(sum(parameters1$Pi))
+# 
+# print("somme des lignes de A pour le français")
+# print(apply(parameters1$A,1,sum))
+# 
+# print("somme des colonnes de pi pour l'anglais")
+# print(sum(parameters2$Pi))
+# 
+# print("somme des lignes de A pour l'anglais")
+# print(apply(parameters2$A,1,sum))
 
 B1 = parameters1$Pi
 B2 = parameters2$Pi
@@ -582,9 +574,9 @@ B = matrix(c(B1, B2), 27,2)
 
 ## 2. Programmation du classifieur
 
-On simule d'abord les deux chaînes de markov à partir des paramètres calculés précédemment.
+Je simule d'abord les deux chaînes de markov à partir des paramètres calculés précédemment.
 
-A partir de notre probabilité d'émission une matrice de dimension 30x2, on prédit la classe des textes.
+A partir de notre probabilité d'émission une matrice de dimension 30x2, je prédis la classe des textes.
 
 ```{r classif_markov}
 
@@ -600,7 +592,7 @@ simulerCM = function(n, A, Pi) {
   return (Z)
 }
 
-# On a deux chaînes de markov simulées suivant les paramètres A1, Pi1, A2, Pi2
+#j'ai deux chaînes de markov simulées suivant les paramètres A1, Pi1, A2, Pi2
 
 CM1 = simulerCM(dim(X)[1], parameters1$A, parameters1$Pi)
 CM2 = simulerCM(dim(X)[1], parameters2$A, parameters2$Pi)
@@ -825,7 +817,7 @@ print("La sortie de l'algorithme de Viterbi")
 print(res_viterbi)
 cat("\n")
 
-# On transforme les 1 en -1 et les 2 en 1
+# je transforme les 1 en -1 et les 2 en 1
 # print("on transforme les classes prédites, les 1 en -1 et les 2 en 1")
 # viterbi_class_transformed = transformTab(res_viterbi)
 # print(viterbi_class_transformed)
@@ -871,14 +863,14 @@ for (i in 1:length(indicesEnglish)) {
 
 ### Commentaires
 
-**On remarque que dans cette méthode, à chaque étape la probabilité d'émission du caractère et du caractère précédent joue un rôle important dans la détection des passages et des couples de caractères(bigrammes)**
+**Je remarque que dans cette méthode, à chaque étape la probabilité d'émission du caractère et du caractère précédent joue un rôle important dans la détection des passages et des couples de caractères(bigrammes)**
 
-# Exercice4: Baum-Welch
+# Exercice4: algorithme de Baum-Welch
 
 ## 1. Algorithme de Baum-Welch pour deux états cachés
 
-Dans cette partie, on code les fonctions `forward`, `backward` ainsi que les méthodes d'estimation de la `matrice de transition`` et des probabilités d'émission` pour deux états cachés.                                                                                       
-Le plus gros problème lors de la modélisation d'un HMM étant de l'imprécision des flottants, nous utiliserons dans les fonctions `forward`, `backward` des méthodes pour éviter de tendre vers l'infini ou être à zéro.
+Dans cette partie, je code les fonctions `forward`, `backward` ainsi que les méthodes d'estimation de la `matrice de transition`` et des probabilités d'émission` pour deux états cachés.                                                                                       
+Le plus gros problème lors de la modélisation d'un HMM étant de l'imprécision des flottants, J'utiliserai dans les fonctions `forward`, `backward` des méthodes pour éviter de tendre vers l'infini ou être à zéro.
 
 
 ### Forward
@@ -964,7 +956,7 @@ backward = function(hmm, observation)
 
 ### Etape Calcul de la matrice A et de la probabilité d'émission
 
-Ici on estime ou réestime la `matrice de transion`  et les `probabilités d'émission`
+Ici j'estime ou réestime la `matrice de transion`  et les `probabilités d'émission`
 
 ```{r estim_params_baum_welch}
 
@@ -1039,7 +1031,7 @@ baumWelchEstim = function(hmm, observation)
 
 ```
 
-### On regroupe tout ici
+### je regroupe tout ici
 
 ```{r baum_welch_final}
 
@@ -1082,7 +1074,7 @@ baumWelch = function(hmm, observation, maxIterations=100, delta=1E-9, pseudoCoun
 ```
 
 ## 2. Excécution de l'algorithme de Baum-Welch avec comme initialisation les informations de l'exercice précédent
-Dans cette partie, on excécute **l'algorithme de Baum-Welch** en utilisant comme initialisation les informations de l'exercice précédent.                                              
+Dans cette partie, j'excécute **l'algorithme de Baum-Welch** en utilisant comme initialisation les informations de l'exercice précédent.                                              
 ```{r exececute_baum_welch}
 
 lettersWithSpace = c(letters, " ")
@@ -1104,7 +1096,7 @@ print(BW$hmm$emissionProbs)
 
 ## 3. Test des paramètres obtenus par l'algorithme de Baum-welch avec Viterbi, initialisation avec les informations des exercices précédents
 
-Dans cette partie, on teste les paramètres obtenus par **l'algorithme de Baum-Welch**, on fait appel à **l'algorithme de Viterbi** avec comme A et B les paramètres données par **l'algorithme de Baum-Welch**.
+Dans cette partie, je teste les paramètres obtenus par **l'algorithme de Baum-Welch**, je fais  appel à **l'algorithme de Viterbi** avec comme A et B les paramètres données par **l'algorithme de Baum-Welch**.
 
 
 ``` {r test_baum_welch}
@@ -1115,15 +1107,11 @@ M[,K]<-rep(1,K)
 Pi_baum_welch<-solve(t(M),b=c(0,1)) 
 
 viterbi_baum_welch = Viterbi(Pi_baum_welch, A_baum_welch , B_baum_welch,observation)
-print("La sortie de l'algorithme de Viterbi")
-print(viterbi_baum_welch)
-cat("\n")
 
-# On transforme les 1 en -1 et les 2 en 1
-print("on transforme les classes prédites, les 1 en -1 et les 2 en 1")
+
+# je transforme les 1 en -1 et les 2 en 1
 viterbi_baum_welch_class_transformed = transformTab(viterbi_baum_welch)
-print(viterbi_baum_welch_class_transformed)
-cat("\n")
+
 
 ## Affichage du résultat
 print("**************************")
@@ -1165,12 +1153,12 @@ for (i in 1:length(indicesEnglish_)) {
 
 ### Commentaires
 
-**On remarque qu'avec une idée de l'initialisation des probabilités du HMM que nous recherchons  même approximative, l'algorithme de baum-welch converge et on se rapproche des vraies valeurs de A et de B**
+**Je remarque qu'avec une idée de l'initialisation des probabilités du HMM que nous recherchons  même approximative, l'algorithme de baum-welch converge et je se rapproche des vraies valeurs de A et de B**
 
 
 ## 4. Baum-Welch avec initialisation aléatoire
 
-Dans cette partie, on teste les paramètres estimés par **l'algorithme de Baum-Welch** sur des paramètres initialisés aléatoirement.                                               
+Dans cette partie, je teste les paramètres estimés par **l'algorithme de Baum-Welch** sur des paramètres initialisés aléatoirement.                                               
 Ce test est fait passant ces paramètres à **l'algorithme de Viterbi**.
 
 ```{r initial_aleatoire}
@@ -1258,11 +1246,11 @@ M[,K]<-rep(1,K)
 Pi_<-solve(t(M),b=c(0,1)) 
 
 viterbi_baum_welch2 = Viterbi(Pi_, BW2$hmm$transProbs , BW2$hmm$emissionProbs,observation)
-print("La sortie de l'algorithme de Viterbi")
-print(viterbi_baum_welch2)
-cat("\n")
+# print("La sortie de l'algorithme de Viterbi")
+# print(viterbi_baum_welch2)
+# cat("\n")
 
-# On transforme les 1 en -1 et les 2 en 1
+# je transforme les 1 en -1 et les 2 en 1
 print("on transforme les classes prédites, les 1 en -1 et les 2 en 1")
 viterbi_baum_welch_class_transformed2 = transformTab(viterbi_baum_welch2)
 print(viterbi_baum_welch_class_transformed2)
@@ -1272,11 +1260,11 @@ cat("\n")
 
 ```
 
-Avec une initialisation aléatoire, on a pas les bons paramètres correspondant à notre séquences
+Avec une initialisation aléatoire, j'ai pas les bons paramètres correspondant à notre séquences
 
 ## 5. Commentaires
 
-**On voit bien que l'algorithme de baum-welch présente cependant le défaut de ne pas toujours converger vers la même solution, voire même de ne pas converger du tout sous certaines conditions.**                                 
+**Je vois bien que l'algorithme de baum-welch présente cependant le défaut de ne pas toujours converger vers la même solution, voire même de ne pas converger du tout sous certaines conditions.**                                 
 
 **Et ces problèmes surviennent surtout losque nous n'avons aucune idée des probabilités du HMM que nous recherchons (pas même approximative) et que nous commençons donc avec un HMM avec des paramètres aléatoires (ce qui signifie que les probabilités de départ et de transition sont aléatoires).**
 
@@ -1337,10 +1325,10 @@ K = matrix(as.integer(matriceDist < medianMat), n, n)
 
 ```
 
-## On affiche un graphique d'adjacence entre nos textes à partir de K
+##j'affiche un graphique d'adjacence entre nos textes à partir de K
 
-Dans cette partie, on affiche un graphique à partir de K.
-Vous pourrez vérifier que ça marche, on affiche à côté les indices des textes par langues dans notre base de texte
+Dans cette partie, j'affiche un graphique à partir de K.
+Vous pourrez vérifier que ça marche,j'affiche à côté les indices des textes par langues dans notre base de texte
 
 ```{r adjacence_mat}
 
@@ -1370,7 +1358,7 @@ print(indicesAnglais)
 cat("\n")
 print("Les textes en anglais sont colorés et les textes en français sont sans couleur")
 
-plot(graph_from_adjacency_matrix(K,mode="undirected"),vertex.color=tmpY)
+plot(graph_from_adjacency_matrix(K,mode="undirected"),vertex.color=tmpY, main="Textes en anglais colorés en orange et ceux en français sont sans couleur")
 
 
 ```
@@ -1596,7 +1584,7 @@ print(predict_class_mbs)
 
 **L'algorithme arrive à séparer les textes des deux langues**
 
-**On a parfois une interversion des paramètres, probablement dû à l'initialisation des paramètres du VEM. Il y a le même problème dans votre exemple lors de la dernière séance**
+**J'ai parfois une interversion des paramètres, probablement dû à l'initialisation des paramètres du VEM.**
 
 
 # CONCLUSION
@@ -1606,10 +1594,10 @@ Différences parmi les classifieurs étudiés :
  - Le classifieur de bayes basés sur des unigrammes                                                                                                       
  - Le classifieur markovien (pas les mêmes resultats à chaque fois dû au caractères aléatoires des simulations des chaînes de Markov)                      
  - Viterbi donne une bonne performance sur les séquences observées avec les bons paramètres (ici nos probabilités d'emission des caractères et de la matrice de transition)                                                                                     
- - Baum-Welch marche mieux quand on initialise avec les bons paramètres (ici nos 2 matrices de transition CF exercice3), tandis que si on l'initialise         aleatoirement, on a parfois peu ou pas de convergence vers une solution correspondante à nos observations                              
- - VEM basé sur la matrice de similarité, si des mots ont des frequences qui se rapprochent mais sont de deux langues differentes, on peut avoir le risque d'une mauvaise classification                                                                              
+ - Baum-Welch marche mieux quand j'initialise avec les bons paramètres (ici nos 2 matrices de transition CF exercice3), tandis que si je l'initialise aleatoirement, j'ai parfois peu ou pas de convergence vers une solution correspondante à nos observations                              
+ - VEM basé sur la matrice de similarité, si des mots ont des frequences qui se rapprochent mais sont de deux langues differentes, je peux avoir le risque d'avoir une mauvaise classification                                                                              
 
-Avec une base de textes bien fournis et des textes mieux structurés, on peut affirmer que le classifieur de bayes et le VEM sont les plus performants.       
+Avec une base de textes bien fournis et des textes mieux structurés, je peux affirmer que le classifieur de bayes et le VEM sont les plus performants.       
 
 
 
