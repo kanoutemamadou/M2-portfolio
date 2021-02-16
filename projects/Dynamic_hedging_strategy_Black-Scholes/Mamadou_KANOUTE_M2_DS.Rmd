@@ -2,8 +2,7 @@
 title: "Dynamic Hedging Strategy in the Black and Scholes framework"
 author: "Mamadou KANOUTE"
 date: "12/11/2020"
-output:
-  md_document: github_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
