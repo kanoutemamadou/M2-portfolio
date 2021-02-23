@@ -20,14 +20,6 @@ Ce dépôt regroupe quelques projets réalisés en M2 dans le repertoire project
 
 ***
 ***
-***
-***
-***
-***
-***
-***
-***
-***
 
 
 
