@@ -26,8 +26,6 @@ Ce dépôt regroupe quelques projets réalisés en M2 dans le repertoire project
 # Machine learning for dimension reduction
 
 
-## The data: Visualize the set of temporal signals using a different color for each signal
-
 
 ```python
 tab = pd.read_csv("/content/drive/MyDrive/sigref.csv",header=None);
