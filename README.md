@@ -18,7 +18,7 @@ Ce dépôt regroupe quelques projets réalisés en M2 dans le repertoire project
 ### HMM-reconnaissance-de-langues-ecrites [Lien vers le projet](/projects/HMM-reconnaissance-de-langues-ecrites)            
 ### Algorithmique et complexité: Alignement de séquences d'ADN avec une solution naîve et solution améliorée [Lien vers le projet](/projects/HMM-reconnaissance-de-langues-ecrites)
 
-A venir
+### A venir
 
 ***
 ***
