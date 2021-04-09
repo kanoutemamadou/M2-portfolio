@@ -10,12 +10,13 @@ Ce dépôt regroupe quelques projets réalisés en M2 dans le repertoire project
 ### Finance         
 #### Dynamic Hedging Strategy in the Black and Scholes framework  [Lien vers le projet](/projects/Dynamic_hedging_strategy_Black-Scholes)               
 #### Simulations: Schema d’Euler, Milstein, Monte-Carlo avec différences finies, flow technique, calcul Malliavian [Lien vers le projet](/projects/Fin_Euler_Milstein_monte-carlo_malliavin_diff-finies_flow-technique)  
-### Deep learning [Lien vers le projet](/projects/Deep_learning)       
+### Deep learning [Lien vers le projet](/projects/Deep_learning)
+### Pyspark [Lien vers le projet](/projects/Pyspark)     
 ### Machine learning 
 #### Apprentissage supervisé [Lien vers le projet](/projects/ML_supervised_learning) 
 #### Apprentissage non supervisé [Lien vers le projet](/projects/ML_unsupervised_learning)        
 ### HMM-reconnaissance-de-langues-ecrites [Lien vers le projet](/projects/HMM-reconnaissance-de-langues-ecrites)            
-### A venir     
+### Algorithmique et complexité: Alignement de séquences d'ADN avec une solution naîve et solution améliorée [Lien vers le projet](https://github.com/kanoutemamadou/algorithmique)
 
 
 ***
