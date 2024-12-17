@@ -16,7 +16,7 @@ Ce dépôt regroupe quelques projets réalisés en M2 dans le repertoire project
 #### Apprentissage supervisé [Lien vers le projet](/projects/ML_supervised_learning) 
 #### Apprentissage non supervisé [Lien vers le projet](/projects/ML_unsupervised_learning)        
 ### HMM-reconnaissance-de-langues-ecrites [Lien vers le projet](/projects/HMM-reconnaissance-de-langues-ecrites)            
-### Algorithmique et complexité: Alignement de séquences d'ADN avec une solution naîve et solution améliorée [Lien vers le projet]([https://github.com/kanoutemamadou0/algorithmique](https://github.com/kanoutemamadou0/algorithmique))
+### Algorithmique et complexité: Alignement de séquences d'ADN avec une solution naîve et solution améliorée [Lien vers le projet](https://github.com/kanoutemamadou0/algorithmique)
 
 ### A venir
 
